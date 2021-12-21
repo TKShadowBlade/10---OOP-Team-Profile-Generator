@@ -15,13 +15,17 @@ function questions() {
             type: "input",
             name: "managerName",
             message: "What is the manager's name?"
-        }
+        },
         {
-            type: "number",
+            type: "input",
             name: "managerID",
             message: "What is the manager's ID?"
-        }
-
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "Please enter manager's email address"
+        },
     ])
 
 }
