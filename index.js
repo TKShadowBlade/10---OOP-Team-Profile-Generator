@@ -74,6 +74,71 @@ function startUp(){
         });
   }
 
+  function addEngineer() {
+      inquirer
+        .prompt([
+            {
+                name: "engineerName",
+                type: "input",
+                message: "Enter the name of engineer",
+                validate: answer => {
+                    if (answer !== "") {
+                        return true;
+                    }
+                    return "At least one character required"
+                }
+            },
+            {
+                name: "engineerId",
+                type: "input",
+                message: "Enter the engineer's ID",
+                validate: answer => {
+                    const valid = answer.match(
+                        /^[1-9]\d*$/
+                    );
+                    if (valid) {
+                        if (arrayIds.includes(answer)) {
+                            return "This ID already in use, please select a new one";
+                        } else {
+                            return true;
+                        }
+                    }
+                    return "ID must be greater than zero";
+                }
+            },
+            {
+                name: "engineerEmail",
+                type: "input",
+                message: "Enter the engineer's email address",
+                validate: answer => {
+                    const valid = answer.match(
+                        /\S+@\S+\.\S+/
+                    );
+                    if (valid) {
+                        return true;
+                    }
+                    return "Email address invalid";
+                }
+            },
+            {
+                name: "engineerGithub",
+                type: "input",
+                message: "Enter the engineer's Github username",
+                validate: answer => {
+                    if (answer !== "") {
+                        return true;
+                    }
+                    return "At least one character required";
+                }
+            }
+        ]).then(answers => {
+            const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
+            team.push(engineer);
+            arrayIds.push(answers.engineerId);
+            makeNewTeam();
+        })
+  }
+
   function addIntern() {
       inquirer
         .prompt([
@@ -132,12 +197,21 @@ function startUp(){
                 }
             }
         ]).then(answers => {
-            const intern = new Intern(answers.internName, answers.interId, answers.interEmail, answers.internSchool);
+            const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
             team.push(intern);
             arrayIds.push(answers.internId);
             makeNewTeam();
         });
   }
+
+  function putTogetherTeam() {
+      if (!fs.existsSync(OUTPUT_DIR)) {
+          fs.mkdirSync(OUTPUT_DIR)
+      }
+      fs.writeFileSync(outputPath, render(team), "utf-8");
+  }
+
+  makeNewManager();
 };
 
 startUp();
