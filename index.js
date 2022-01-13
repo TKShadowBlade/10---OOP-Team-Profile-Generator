@@ -5,6 +5,8 @@ const fs = require('fs')
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "managerteam.html")
 
+const generate = require('./src/generatehtml.js')
+
 const Engineer = require('./lib/Engineer');
 const Manager = require('./lib/Manager');
 const Intern = require('./lib/Intern');
@@ -208,7 +210,7 @@ function startUp(){
       if (!fs.existsSync(OUTPUT_DIR)) {
           fs.mkdirSync(OUTPUT_DIR)
       }
-      fs.writeFileSync(outputPath, render(team), "utf-8");
+      fs.writeFileSync(outputPath, generate(team), "utf-8");
   }
 
   makeNewManager();
